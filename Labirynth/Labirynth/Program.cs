@@ -18,11 +18,14 @@ namespace Labirynth
     {
         static void Main(string[] args)
         {
+            //Lol();
             SetWindow();
+            Console.SetBufferSize(50,40);
             Console.OutputEncoding = Encoding.UTF8;
             char[,] lab1 = LoadLabirynth();
             Point playerPoint = getPlayerCoordinates(lab1);
             DrawLabirynth(playerPoint, lab1);
+            playerPoint = getPlayerCoordinates(lab1);
             Console.Write("\n"+playerPoint.X + ""+ playerPoint.Y);
             
             //char c = '\u2181';
@@ -37,14 +40,21 @@ namespace Labirynth
                     case ConsoleKey.UpArrow:
                         if (lab1[playerPoint.X - 1, playerPoint.Y ] != 'X')
                         {
-                            //Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
-                            //Console.Write(' ');
-                            //Console.SetCursorPosition(playerPoint.Y, playerPoint.X -1);
-                            //Console.Write('&');
+                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(' ');
+                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X -1);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            //Console.BackgroundColor = ConsoleColor.Red;
+                            Console.Write('&');
                             lab1[playerPoint.X, playerPoint.Y] = ' ';
                             lab1[playerPoint.X - 1, playerPoint.Y ] = '&';
-                            DrawLabirynth(playerPoint,lab1);
+                            //DrawLabirynth(playerPoint,lab1);
                             playerPoint = getPlayerCoordinates(lab1);
+                            Console.SetCursorPosition(0, 30);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write("\n" + playerPoint.X + "" + playerPoint.Y);
                         }
                         break;
@@ -52,16 +62,27 @@ namespace Labirynth
                     case ConsoleKey.RightArrow:
                         if (playerPoint.Y + 1 > 29)
                         {
-                            Console.Write("\n\n" + "GRATULACJE WYSZEDŁEŚ Z LABIRYNTU!");
+                            LevelEndScreen();
                         }
                         else
                         {
                             if (lab1[playerPoint.X, playerPoint.Y + 1] != 'X')
                             {
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write(' ');
+                                Console.SetCursorPosition(playerPoint.Y +1, playerPoint.X);
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                //Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write('&');
                                 lab1[playerPoint.X, playerPoint.Y] = ' ';
                                 lab1[playerPoint.X, playerPoint.Y + 1] = '&';
-                                DrawLabirynth(playerPoint, lab1);
+                                //DrawLabirynth(playerPoint, lab1);
                                 playerPoint = getPlayerCoordinates(lab1);
+                                Console.SetCursorPosition(0, 30);
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.BackgroundColor = ConsoleColor.Red;
                                 Console.Write("\n" + playerPoint.X + "" + playerPoint.Y);
                             }
                         }
@@ -70,10 +91,21 @@ namespace Labirynth
                     case ConsoleKey.DownArrow:
                         if (lab1[playerPoint.X + 1, playerPoint.Y] != 'X')
                         {
+                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(' ');
+                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X + 1);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            //Console.BackgroundColor = ConsoleColor.Red;
+                            Console.Write('&');
                             lab1[playerPoint.X, playerPoint.Y] = ' ';
                             lab1[playerPoint.X + 1, playerPoint.Y] = '&';
-                            DrawLabirynth(playerPoint, lab1);
+                            //DrawLabirynth(playerPoint, lab1);
                             playerPoint = getPlayerCoordinates(lab1);
+                            Console.SetCursorPosition(0, 30);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write("\n" + playerPoint.X + "" + playerPoint.Y);
                         }
                         break;
@@ -81,10 +113,21 @@ namespace Labirynth
                     case ConsoleKey.LeftArrow:
                         if (lab1[playerPoint.X , playerPoint.Y -1] != 'X')
                         {
+                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(' ');
+                            Console.SetCursorPosition(playerPoint.Y - 1, playerPoint.X);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            //Console.BackgroundColor = ConsoleColor.Red;
+                            Console.Write('&');
                             lab1[playerPoint.X, playerPoint.Y] = ' ';
                             lab1[playerPoint.X, playerPoint.Y -1] = '&';
-                            DrawLabirynth(playerPoint, lab1);
+                            //DrawLabirynth(playerPoint, lab1);
                             playerPoint = getPlayerCoordinates(lab1);
+                            Console.SetCursorPosition(0,30);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write("\n" + playerPoint.X + "" + playerPoint.Y);
                         }
                         break;
@@ -96,14 +139,14 @@ namespace Labirynth
 
         static void SetColors()
         {       
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
             Console.Clear(); //Important!
         }
 
         static void SetWindowSize()
         {
-           // Console.SetWindowSize(50, 30);
-           // Console.SetBufferSize(50, 30);
+            // Console.SetWindowSize(50, 30);
+            // Console.SetBufferSize(50, 30);
         }
 
         static void SetWindow()
@@ -113,6 +156,23 @@ namespace Labirynth
             Console.Title = "Labirynth Game";
         }
 
+
+        static void LevelEndScreen()
+        {
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.Clear();
+            IntPtr hCurrentWindow = Process.GetCurrentProcess().MainWindowHandle;
+            Graphics g = Graphics.FromHwnd(hCurrentWindow);
+            g.DrawRectangle(new Pen(Color.Red, 3), 0, 0, 300, 500);
+            g.Dispose();
+            Console.SetCursorPosition(4, 3);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Gratulacje! Wyszedłeś z labiryntu :)");
+            Console.ReadLine();
+        }
+
         static Point getPlayerCoordinates(char[,] lab1)
         {
             Point p = new Point();
@@ -120,14 +180,12 @@ namespace Labirynth
             {
                 for (int j = 0; j < 30; j++)
                 {
-                    Console.Write(lab1[i, j]);
                     if (lab1[i, j] == '&')
                     {
                         p.X = i;
                         p.Y = j;
                     }
                 }
-                Console.Write("\n");
             }
             return p;
         }
@@ -135,19 +193,36 @@ namespace Labirynth
         static void DrawLabirynth(Point playerPoint, char[,] lab1)
         {
             Console.Clear();
+            
             for (int i = 0; i < 30; i++)
             {
                 for (int j = 0; j < 30; j++)
                 {
-                    Console.Write(lab1[i, j]);
-                    if (lab1[i, j] == '&')
+                    switch (lab1[i, j])
                     {
-                        playerPoint.X = i;
-                        playerPoint.Y = j;
+                        case '&':
+                            //Console.BackgroundColor = ConsoleColor.Red;
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            playerPoint.X = i;
+                            playerPoint.Y = j;
+                            break;
+                        case 'X':
+                            Console.BackgroundColor = ConsoleColor.DarkGray;
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            break;
+                        case ' ':
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.White;
+                            break;
                     }
+                    Console.Write(lab1[i, j]);
                 }
                 Console.Write("\n");
             }
+//            IntPtr hCurrentWindow = Process.GetCurrentProcess().MainWindowHandle;
+//            Graphics g = Graphics.FromHwnd(hCurrentWindow);
+//            g.DrawRectangle(new Pen(Color.Red, 3), 0, 0, 300, 580);
+//            g.Dispose();
         }
 
         static char[,] LoadLabirynth()
@@ -158,9 +233,6 @@ namespace Labirynth
             using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth.txt"))
             {
                 string Map = readtext.ReadToEnd();
-                //System.Console.Write(Map[32].ToString());
-                Console.ReadLine();
-                //Console.Write(Map);
                 int a = 0, b = 0;
                 char currentChar;
                 for (int i = 0; i < Map.Length; i++)
