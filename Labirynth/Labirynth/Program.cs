@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Threading;
 
 
 namespace Labirynth
@@ -36,6 +37,10 @@ namespace Labirynth
                     case ConsoleKey.UpArrow:
                         if (lab1[playerPoint.X - 1, playerPoint.Y ] != 'X')
                         {
+                            //Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                            //Console.Write(' ');
+                            //Console.SetCursorPosition(playerPoint.Y, playerPoint.X -1);
+                            //Console.Write('&');
                             lab1[playerPoint.X, playerPoint.Y] = ' ';
                             lab1[playerPoint.X - 1, playerPoint.Y ] = '&';
                             DrawLabirynth(playerPoint,lab1);
@@ -60,7 +65,6 @@ namespace Labirynth
                                 Console.Write("\n" + playerPoint.X + "" + playerPoint.Y);
                             }
                         }
-                        
                         break;
 
                     case ConsoleKey.DownArrow:
