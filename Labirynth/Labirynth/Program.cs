@@ -11,6 +11,12 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
 
+//+----------------------------------+
+//| LABIRYNTH GAME by Paweł Borowski |    
+//| Console setup:                   |
+//|    -czcionka rastrowa : 16x12    |
+//|    -okno: 32 szer 34 wys         |
+//+----------------------------------+
 
 namespace Labirynth
 {
@@ -148,8 +154,6 @@ namespace Labirynth
                         break;
                 }
             }
-
-
         }
 
         static void SetColors()
@@ -246,7 +250,6 @@ namespace Labirynth
                 Console.Write("\n");
             }
         }
-
         static char[,] LoadLabirynth() //odczyt labiryntu z pliku tekstowego
         {
             char[,] LabirynthOne = new char[30, 30];
