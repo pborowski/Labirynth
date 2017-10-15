@@ -70,6 +70,7 @@ namespace Labirynth
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
+                coins = 7;
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -103,7 +104,7 @@ namespace Labirynth
                     case ConsoleKey.RightArrow:
                         if (lab1[playerPoint.X, playerPoint.Y + 1] == '!' && coins == 7)
                         {
-                            LevelEndScreen();
+                            LevelEndScreen(1);
                         }
                         else if(lab1[playerPoint.X, playerPoint.Y + 1] != '!')
                         {
@@ -189,6 +190,7 @@ namespace Labirynth
                         break;
                 }
             }
+            MenuScreen();
         }
 
         static void Leve2()
@@ -214,6 +216,7 @@ namespace Labirynth
             ConsoleKeyInfo keyInfo;
                 while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
                 {
+                    coins = 10;
                     switch (keyInfo.Key)
                     {
                         case ConsoleKey.UpArrow:
@@ -264,7 +267,7 @@ namespace Labirynth
                             break;
 
                         case ConsoleKey.RightArrow:
-                                if (lab1[playerPoint.X, playerPoint.Y + 1] != 'X')
+                                if (lab1[playerPoint.X, playerPoint.Y + 1] != 'X' && lab1[playerPoint.X, playerPoint.Y + 1] != '#')
                                 {
                                     if (lab1[playerPoint.X, playerPoint.Y + 1] == '$')
                                     {
@@ -293,9 +296,9 @@ namespace Labirynth
                         case ConsoleKey.DownArrow:
                         if (lab1[playerPoint.X+1, playerPoint.Y ] == '!' && coins == 10)
                         {
-                            LevelEndScreen();
+                            LevelEndScreen(2);
                         }
-                        else if(lab1[playerPoint.X + 1, playerPoint.Y] != '!')
+                        else if(lab1[playerPoint.X + 1, playerPoint.Y] != '!' && lab1[playerPoint.X + 1, playerPoint.Y] != '#')
                         if (lab1[playerPoint.X + 1, playerPoint.Y] != 'X')
                             {
                                 if (lab1[playerPoint.X + 1, playerPoint.Y] == '$')
@@ -350,6 +353,7 @@ namespace Labirynth
                             break;
                     }
                 }
+                MenuScreen();
         }
 
         static void SetColors()
@@ -398,6 +402,7 @@ namespace Labirynth
             Console.Write("Level 2");
             Console.SetCursorPosition(2, 10);
             Console.Write("Back");
+            Console.SetCursorPosition(0, 8);
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -445,6 +450,7 @@ namespace Labirynth
                 }
 
             }
+
         }
 
         static void MenuScreen()
@@ -521,19 +527,51 @@ namespace Labirynth
             }
         }
 
-        static void LevelEndScreen() //wyświetlanie ekranu końca gry
+        static void LevelEndScreen(int previousLevel) //wyświetlanie ekranu końca gry
         {
             Console.Clear();
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
             Console.Clear();
             IntPtr hCurrentWindow = Process.GetCurrentProcess().MainWindowHandle;
             Graphics g = Graphics.FromHwnd(hCurrentWindow);
-            g.DrawRectangle(new Pen(Color.Red, 3), 10, 10, 400, 100);
+            g.DrawRectangle(new Pen(Color.Red, 3), 22, 22, 400, 100);
             g.Dispose();
-            Console.SetCursorPosition(4, 3);
-            Console.BackgroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(3, 3);
+            //Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("ZWYCIESTWO! :)");
+            if (previousLevel == 1)
+            {
+                Console.Write("UKONCZYLES POZIOM 1! :)");
+                Console.SetCursorPosition(12, 7);
+                Console.Write("next =>");
+                ConsoleKeyInfo keyInfo;
+                while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+                {
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.RightArrow:
+                            Leve2();
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Console.Write("ZWYCIESTWO! :)");
+                Console.SetCursorPosition(15, 8);
+                Console.Write("menu =>");
+                ConsoleKeyInfo keyInfo;
+                while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+                {
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.RightArrow:
+                            MenuScreen();
+                            break;
+                    }
+                }
+            }
+            
             Console.ReadLine();
         }
 
