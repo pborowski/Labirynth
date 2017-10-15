@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Threading;
 
 //+----------------------------------+
@@ -24,14 +25,37 @@ namespace Labirynth
     {
         static void Main(string[] args)
         {
+            MenuScreen();
+           
+        }
+
+        static void CheckCoins(int monety, char[,] lab1)
+        {
+            Point[] tab = getFinishCoordinates(lab1);
+            if (monety == 7)
+            {
+                Console.SetCursorPosition(tab[0].Y,tab[0].X);
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write('!');
+                Console.SetCursorPosition(tab[1].Y, tab[1].X);
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write('!');
+            }
+                
+        }
+
+        static void Level1()
+        {
             SetWindow();
             int coins = 0;
-            char[,] lab1 = LoadLabirynth();
+            char[,] lab1 = LoadLabirynth(1);
             Point playerPoint = getPlayerCoordinates(lab1);
             DrawLabirynth(playerPoint, lab1);
             playerPoint = getPlayerCoordinates(lab1);
             //Console.Write("\n"+playerPoint.X + ""+ playerPoint.Y);
-            
+
             //char c = '\u2181';
             //Console.Write(c);
             //SetPleyer();
@@ -42,7 +66,7 @@ namespace Labirynth
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        if (lab1[playerPoint.X - 1, playerPoint.Y ] != 'X')
+                        if (lab1[playerPoint.X - 1, playerPoint.Y] != 'X')
                         {
                             if (lab1[playerPoint.X - 1, playerPoint.Y] == '$')
                             {
@@ -53,27 +77,28 @@ namespace Labirynth
                             Console.BackgroundColor = ConsoleColor.White;
                             Console.ForegroundColor = ConsoleColor.White;
                             Console.Write(' ');
-                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X -1);
+                            Console.SetCursorPosition(playerPoint.Y, playerPoint.X - 1);
                             Console.ForegroundColor = ConsoleColor.Red;
                             //Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write('@');
                             lab1[playerPoint.X, playerPoint.Y] = ' ';
-                            lab1[playerPoint.X - 1, playerPoint.Y ] = '@';
+                            lab1[playerPoint.X - 1, playerPoint.Y] = '@';
                             //DrawLabirynth(playerPoint,lab1);
                             playerPoint = getPlayerCoordinates(lab1);
                             Console.SetCursorPosition(0, 30);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write("\n" + "Monety: " + coins + "/7");
+                            CheckCoins(coins, lab1);
                         }
                         break;
 
                     case ConsoleKey.RightArrow:
-                        if (lab1[playerPoint.X,playerPoint.Y + 1] =='!')
+                        if (lab1[playerPoint.X, playerPoint.Y + 1] == '!' && coins == 7)
                         {
                             LevelEndScreen();
                         }
-                        else
+                        else if(lab1[playerPoint.X, playerPoint.Y + 1] != '!')
                         {
                             if (lab1[playerPoint.X, playerPoint.Y + 1] != 'X')
                             {
@@ -85,7 +110,7 @@ namespace Labirynth
                                 Console.BackgroundColor = ConsoleColor.White;
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.Write(' ');
-                                Console.SetCursorPosition(playerPoint.Y +1, playerPoint.X);
+                                Console.SetCursorPosition(playerPoint.Y + 1, playerPoint.X);
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 //Console.BackgroundColor = ConsoleColor.Red;
                                 Console.Write('@');
@@ -97,6 +122,7 @@ namespace Labirynth
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.BackgroundColor = ConsoleColor.Red;
                                 Console.Write("\n" + "Monety: " + coins + "/7");
+                                CheckCoins(coins, lab1);
                             }
                         }
                         break;
@@ -124,11 +150,12 @@ namespace Labirynth
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write("\n" + "Monety: " + coins + "/7");
+                            CheckCoins(coins, lab1);
                         }
                         break;
 
                     case ConsoleKey.LeftArrow:
-                        if (lab1[playerPoint.X , playerPoint.Y -1] != 'X')
+                        if (lab1[playerPoint.X, playerPoint.Y - 1] != 'X')
                         {
                             if (lab1[playerPoint.X, playerPoint.Y - 1] == '$')
                             {
@@ -143,13 +170,14 @@ namespace Labirynth
                             //Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write('@');
                             lab1[playerPoint.X, playerPoint.Y] = ' ';
-                            lab1[playerPoint.X, playerPoint.Y -1] = '@';
+                            lab1[playerPoint.X, playerPoint.Y - 1] = '@';
                             //DrawLabirynth(playerPoint, lab1);
                             playerPoint = getPlayerCoordinates(lab1);
-                            Console.SetCursorPosition(0,30);
+                            Console.SetCursorPosition(0, 30);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write("\n" + "Monety: " + coins + "/7");
+                            CheckCoins(coins, lab1);
                         }
                         break;
                 }
@@ -178,6 +206,152 @@ namespace Labirynth
             Console.Title = "Labirynth Game";
         }
 
+        static void ChooseLevelScreen()
+        {
+            Console.Clear();
+            SetWindow();
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            int option = 8;
+            Console.Write("+-----------------------------+\n");
+            Console.Write("|                             |\n");
+            Console.Write("|    LABIRYNTH GAME           |\n");
+            Console.Write("|        by Pawel Borowski    |\n");
+            Console.Write("|                             |\n");
+            Console.Write("+-----------------------------+\n");
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            //Console.ForegroundColor = ConsoleColor.Black;
+
+            Console.SetCursorPosition(0, 8);
+            Console.Write("*");
+            Console.SetCursorPosition(2, 8);
+            Console.Write("Level 1");
+            Console.SetCursorPosition(2, 9);
+            Console.Write("Level 2");
+            Console.SetCursorPosition(2, 10);
+            Console.Write("Exit");
+            ConsoleKeyInfo keyInfo;
+            while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+            {
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (option > 8)
+                        {
+                            Console.SetCursorPosition(0, option);
+                            Console.Write(" ");
+                            Console.SetCursorPosition(0, option - 1);
+                            Console.Write("*");
+                            option--;
+                        }
+                        break;
+
+                    case ConsoleKey.Enter:
+                        switch (Console.CursorTop)
+                        {
+                            case 8:
+                                Level1();
+                                break;
+                            case 9:
+                                //level2
+                                break;
+                            case 10:
+                                //exit
+                                Environment.Exit(0);
+                                break;
+                        }
+
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        if (option < 10)
+                        {
+                            Console.SetCursorPosition(0, option);
+                            Console.Write(" ");
+                            Console.SetCursorPosition(0, option + 1);
+                            Console.Write("*");
+                            option++;
+                        }
+                        break;
+
+                }
+
+            }
+        }
+
+        static void MenuScreen()
+        {
+            Console.Clear();
+            SetWindow();
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor=ConsoleColor.Yellow;
+            int option = 8;
+            Console.Write("+-----------------------------+\n");
+            Console.Write("|                             |\n");
+            Console.Write("|    LABIRYNTH GAME           |\n");
+            Console.Write("|        by Pawel Borowski    |\n");
+            Console.Write("|                             |\n");
+            Console.Write("+-----------------------------+\n");
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            //Console.ForegroundColor = ConsoleColor.Black;
+
+            Console.SetCursorPosition(0, 8);
+            Console.Write("*");
+            Console.SetCursorPosition(2,8);
+            Console.Write("New Game");
+            Console.SetCursorPosition(2, 9);
+            Console.Write("Choose Level");
+            Console.SetCursorPosition(2, 10);
+            Console.Write("Exit");
+            Console.SetCursorPosition(0, 8);
+            ConsoleKeyInfo keyInfo;
+            while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+            {
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (option > 8)
+                        {
+                            Console.SetCursorPosition(0, option);
+                            Console.Write(" ");
+                            Console.SetCursorPosition(0,option-1);
+                            Console.Write("*");
+                            option--;
+                        }
+                        break;
+
+                    case ConsoleKey.Enter:
+                        switch (Console.CursorTop)
+                        {
+                            case 8:
+                                Level1();
+                                break;
+                            case 9:
+                                ChooseLevelScreen();
+                                break;
+                            case 10:
+                                //exit
+                                Environment.Exit(0);
+                                break;
+                        }
+                            
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        if (option < 10)
+                        {
+                            Console.SetCursorPosition(0, option);
+                            Console.Write(" ");
+                            Console.SetCursorPosition(0, option + 1);
+                            Console.Write("*");
+                            option++;
+                        }
+                        break;
+
+                }
+
+            }
+        }
 
         static void LevelEndScreen() //wyświetlanie ekranu końca gry
         {
@@ -211,6 +385,25 @@ namespace Labirynth
             }
             return p;
         }
+        static Point[] getFinishCoordinates(char[,] lab1) //odnajdowanie położenia gracza
+        {
+            Point[] tab = new Point[2];
+            int ind=0;
+            for (int i = 0; i < 30; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    if (lab1[i, j] == '!')
+                    {
+                        
+                        tab[ind] = new Point(i, j);
+                        ind++;
+                    }
+                }
+            }
+            return tab;
+        }
+
 
         static void DrawLabirynth(Point playerPoint, char[,] lab1) //rysowanie labiryntu w konsoli
         {
@@ -237,8 +430,8 @@ namespace Labirynth
                             Console.ForegroundColor = ConsoleColor.White;
                             break;
                         case '!':
-                            Console.BackgroundColor = ConsoleColor.Cyan;
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.BackgroundColor = ConsoleColor.Red;
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             break;
                         case '$':
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -250,71 +443,154 @@ namespace Labirynth
                 Console.Write("\n");
             }
         }
-        static char[,] LoadLabirynth() //odczyt labiryntu z pliku tekstowego
+        static char[,] LoadLabirynth(int id) //odczyt labiryntu z pliku tekstowego
         {
             char[,] LabirynthOne = new char[30, 30];
 
+            char [,]LabirynthTwo = new char[30,30];
 
-            using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth.txt"))
+            try
             {
-                string Map = readtext.ReadToEnd();
-                int a = 0, b = 0;
-                char currentChar;
-                for (int i = 0; i < Map.Length; i++)
+                using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth.txt"))
                 {
-                    
-                    switch (Map[i])
+                    string Map = readtext.ReadToEnd();
+                    int a = 0, b = 0;
+                    char currentChar;
+                    for (int i = 0; i < Map.Length; i++)
                     {
-                        case '1': //ściana
-                            currentChar ='X';//'\u2181';
-                            break;
-                        case '0':
-                            currentChar = ' ';
-                            break;
-                        case 'X': //gracz
-                            currentChar = '@';
-                            break;
-                        case '!':
-                            currentChar = '!';
-                            break;
-                        case '$':
-                            currentChar = '$';
-                            break;
-                        default:
-                            currentChar = '&';
-                            break;
-                    }
-                    if (currentChar != '&')
-                    {
-                        if (a < 29)
-                        {
-                            if (b < 30)
-                            {
-                                LabirynthOne[a, b] = currentChar;
-                            }
-                            else
-                            {
-                                b = 0;
-                                LabirynthOne[a, b] = currentChar;
-                                a++;
 
-                            }
-                        }
-                        else
+                        switch (Map[i])
                         {
-                            if (a == 29)
+                            case '1': //ściana
+                                currentChar = 'X';//'\u2181';
+                                break;
+                            case '0':
+                                currentChar = ' ';
+                                break;
+                            case 'X': //gracz
+                                currentChar = '@';
+                                break;
+                            case '!':
+                                currentChar = '!';
+                                break;
+                            case '$':
+                                currentChar = '$';
+                                break;
+                            default:
+                                currentChar = '&';
+                                break;
+                        }
+                        if (currentChar != '&')
+                        {
+                            if (a < 29)
                             {
                                 if (b < 30)
                                 {
                                     LabirynthOne[a, b] = currentChar;
                                 }
+                                else
+                                {
+                                    b = 0;
+                                    LabirynthOne[a, b] = currentChar;
+                                    a++;
+
+                                }
                             }
+                            else
+                            {
+                                if (a == 29)
+                                {
+                                    if (b < 30)
+                                    {
+                                        LabirynthOne[a, b] = currentChar;
+                                    }
+                                }
+                            }
+                            b++;
                         }
-                        b++;
                     }
                 }
             }
-            return LabirynthOne;
+            catch
+            {
+                
+            }
+            
+            try
+            {
+                using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth2.txt"))
+                {
+                    string Map = readtext.ReadToEnd();
+                    int a = 0, b = 0;
+                    char currentChar;
+                    for (int i = 0; i < Map.Length; i++)
+                    {
+
+                        switch (Map[i])
+                        {
+                            case '1': //ściana
+                                currentChar = 'X';//'\u2181';
+                                break;
+                            case '0':
+                                currentChar = ' ';
+                                break;
+                            case 'X': //gracz
+                                currentChar = '@';
+                                break;
+                            case '!':
+                                currentChar = '!';
+                                break;
+                            case '$':
+                                currentChar = '$';
+                                break;
+                            default:
+                                currentChar = '&';
+                                break;
+                        }
+                        if (currentChar != '&')
+                        {
+                            if (a < 29)
+                            {
+                                if (b < 30)
+                                {
+                                    LabirynthTwo[a, b] = currentChar;
+                                }
+                                else
+                                {
+                                    b = 0;
+                                    LabirynthTwo[a, b] = currentChar;
+                                    a++;
+
+                                }
+                            }
+                            else
+                            {
+                                if (a == 29)
+                                {
+                                    if (b < 30)
+                                    {
+                                        LabirynthOne[a, b] = currentChar;
+                                    }
+                                }
+                            }
+                            b++;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                
+            }
+           
+            if (id == 1)
+            {
+                return LabirynthOne;
+            }
+            else
+            {
+                return LabirynthTwo;
+            }
         }
     }
 }
