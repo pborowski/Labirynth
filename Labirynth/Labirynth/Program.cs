@@ -29,10 +29,10 @@ namespace Labirynth
            
         }
 
-        static void CheckCoins(int monety, char[,] lab1)
+        static void CheckCoins(int monety, char[,] lab1, int limit)
         {
             Point[] tab = getFinishCoordinates(lab1);
-            if (monety == 7)
+            if (monety == limit)
             {
                 Console.SetCursorPosition(tab[0].Y,tab[0].X);
                 Console.BackgroundColor = ConsoleColor.Green;
@@ -50,15 +50,22 @@ namespace Labirynth
         {
             SetWindow();
             int coins = 0;
+            Console.SetCursorPosition(0,0);
             char[,] lab1 = LoadLabirynth(1);
             Point playerPoint = getPlayerCoordinates(lab1);
             DrawLabirynth(playerPoint, lab1);
             playerPoint = getPlayerCoordinates(lab1);
-            //Console.Write("\n"+playerPoint.X + ""+ playerPoint.Y);
+            CheckCoins(coins, lab1,7);
 
-            //char c = '\u2181';
-            //Console.Write(c);
-            //SetPleyer();
+            Console.SetCursorPosition(0, 30);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write("LEVEL 1");
+
+            Console.SetCursorPosition(0, 31);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write("Monety: " + coins + "/7");
 
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
@@ -85,11 +92,11 @@ namespace Labirynth
                             lab1[playerPoint.X - 1, playerPoint.Y] = '@';
                             //DrawLabirynth(playerPoint,lab1);
                             playerPoint = getPlayerCoordinates(lab1);
-                            Console.SetCursorPosition(0, 30);
+                            Console.SetCursorPosition(0, 31);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.BackgroundColor = ConsoleColor.Red;
-                            Console.Write("\n" + "Monety: " + coins + "/7");
-                            CheckCoins(coins, lab1);
+                            Console.Write("Monety: " + coins + "/7");
+                            CheckCoins(coins, lab1,7);
                         }
                         break;
 
@@ -118,11 +125,11 @@ namespace Labirynth
                                 lab1[playerPoint.X, playerPoint.Y + 1] = '@';
                                 //DrawLabirynth(playerPoint, lab1);
                                 playerPoint = getPlayerCoordinates(lab1);
-                                Console.SetCursorPosition(0, 30);
+                                Console.SetCursorPosition(0, 31);
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.BackgroundColor = ConsoleColor.Red;
-                                Console.Write("\n" + "Monety: " + coins + "/7");
-                                CheckCoins(coins, lab1);
+                                Console.Write("Monety: " + coins + "/7");
+                                CheckCoins(coins, lab1,7);
                             }
                         }
                         break;
@@ -146,11 +153,11 @@ namespace Labirynth
                             lab1[playerPoint.X + 1, playerPoint.Y] = '@';
                             //DrawLabirynth(playerPoint, lab1);
                             playerPoint = getPlayerCoordinates(lab1);
-                            Console.SetCursorPosition(0, 30);
+                            Console.SetCursorPosition(0, 31);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.BackgroundColor = ConsoleColor.Red;
-                            Console.Write("\n" + "Monety: " + coins + "/7");
-                            CheckCoins(coins, lab1);
+                            Console.Write("Monety: " + coins + "/7");
+                            CheckCoins(coins, lab1,7);
                         }
                         break;
 
@@ -173,15 +180,176 @@ namespace Labirynth
                             lab1[playerPoint.X, playerPoint.Y - 1] = '@';
                             //DrawLabirynth(playerPoint, lab1);
                             playerPoint = getPlayerCoordinates(lab1);
-                            Console.SetCursorPosition(0, 30);
+                            Console.SetCursorPosition(0, 31);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.BackgroundColor = ConsoleColor.Red;
-                            Console.Write("\n" + "Monety: " + coins + "/7");
-                            CheckCoins(coins, lab1);
+                            Console.Write("Monety: " + coins + "/7");
+                            CheckCoins(coins, lab1,7);
                         }
                         break;
                 }
             }
+        }
+
+        static void Leve2()
+        {
+            
+            
+                SetWindow();
+                int coins = 0;
+                char[,] lab1 = LoadLabirynth(2);
+                Point playerPoint = getPlayerCoordinates(lab1);
+                DrawLabirynth(playerPoint, lab1);
+                playerPoint = getPlayerCoordinates(lab1);
+                Console.SetCursorPosition(0, 30);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("LEVEL 2");
+
+            Console.SetCursorPosition(0, 31);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write("Monety: " + coins + "/10");
+
+            ConsoleKeyInfo keyInfo;
+                while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+                {
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.UpArrow:
+                            if (lab1[playerPoint.X - 1, playerPoint.Y] == '#')
+                            {
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write(' ');
+                                Console.SetCursorPosition(10,18);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.Write('@');
+                                lab1[playerPoint.X, playerPoint.Y] = ' ';
+                                lab1[18, 10] = '@';
+                                playerPoint = getPlayerCoordinates(lab1);
+                                Console.SetCursorPosition(0, 31);
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write("Monety: " + coins + "/10");
+                                CheckCoins(coins, lab1,10);
+                        }
+                            else if (lab1[playerPoint.X - 1, playerPoint.Y] != 'X')
+                            {
+                                
+                                if (lab1[playerPoint.X - 1, playerPoint.Y] == '$')
+                                {
+                                    coins++;
+
+                                }
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write(' ');
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X - 1);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                //Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write('@');
+                                lab1[playerPoint.X, playerPoint.Y] = ' ';
+                                lab1[playerPoint.X - 1, playerPoint.Y] = '@';
+                                //DrawLabirynth(playerPoint,lab1);
+                                playerPoint = getPlayerCoordinates(lab1);
+                                Console.SetCursorPosition(0, 31);
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write("Monety: " + coins + "/10");
+                                CheckCoins(coins, lab1,10);
+                            }
+                            break;
+
+                        case ConsoleKey.RightArrow:
+                                if (lab1[playerPoint.X, playerPoint.Y + 1] != 'X')
+                                {
+                                    if (lab1[playerPoint.X, playerPoint.Y + 1] == '$')
+                                    {
+                                        coins++;
+                                    }
+                                    Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                                    Console.BackgroundColor = ConsoleColor.White;
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(' ');
+                                    Console.SetCursorPosition(playerPoint.Y + 1, playerPoint.X);
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    //Console.BackgroundColor = ConsoleColor.Red;
+                                    Console.Write('@');
+                                    lab1[playerPoint.X, playerPoint.Y] = ' ';
+                                    lab1[playerPoint.X, playerPoint.Y + 1] = '@';
+                                    //DrawLabirynth(playerPoint, lab1);
+                                    playerPoint = getPlayerCoordinates(lab1);
+                                    Console.SetCursorPosition(0, 31);
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.BackgroundColor = ConsoleColor.Red;
+                                    Console.Write("Monety: " + coins + "/10");
+                                    CheckCoins(coins, lab1,10);
+                                }
+                            break;
+
+                        case ConsoleKey.DownArrow:
+                        if (lab1[playerPoint.X+1, playerPoint.Y ] == '!' && coins == 10)
+                        {
+                            LevelEndScreen();
+                        }
+                        else if(lab1[playerPoint.X + 1, playerPoint.Y] != '!')
+                        if (lab1[playerPoint.X + 1, playerPoint.Y] != 'X')
+                            {
+                                if (lab1[playerPoint.X + 1, playerPoint.Y] == '$')
+                                {
+                                    coins++;
+                                }
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write(' ');
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X + 1);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                //Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write('@');
+                                lab1[playerPoint.X, playerPoint.Y] = ' ';
+                                lab1[playerPoint.X + 1, playerPoint.Y] = '@';
+                                //DrawLabirynth(playerPoint, lab1);
+                                playerPoint = getPlayerCoordinates(lab1);
+                                Console.SetCursorPosition(0, 31);
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write("Monety: " + coins + "/10");
+                                CheckCoins(coins, lab1,10);
+                            }
+                            break;
+
+                        case ConsoleKey.LeftArrow:
+                            if (lab1[playerPoint.X, playerPoint.Y - 1] != 'X')
+                            {
+                                if (lab1[playerPoint.X, playerPoint.Y - 1] == '$')
+                                {
+                                    coins++;
+                                }
+                                Console.SetCursorPosition(playerPoint.Y, playerPoint.X);
+                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write(' ');
+                                Console.SetCursorPosition(playerPoint.Y - 1, playerPoint.X);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                //Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write('@');
+                                lab1[playerPoint.X, playerPoint.Y] = ' ';
+                                lab1[playerPoint.X, playerPoint.Y - 1] = '@';
+                                //DrawLabirynth(playerPoint, lab1);
+                                playerPoint = getPlayerCoordinates(lab1);
+                                Console.SetCursorPosition(0, 31);
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.Write("Monety: " + coins + "/10");
+                                CheckCoins(coins, lab1,10);
+                            }
+                            break;
+                    }
+                }
         }
 
         static void SetColors()
@@ -229,7 +397,7 @@ namespace Labirynth
             Console.SetCursorPosition(2, 9);
             Console.Write("Level 2");
             Console.SetCursorPosition(2, 10);
-            Console.Write("Exit");
+            Console.Write("Back");
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -253,11 +421,11 @@ namespace Labirynth
                                 Level1();
                                 break;
                             case 9:
-                                //level2
+                                Leve2();
                                 break;
                             case 10:
-                                //exit
-                                Environment.Exit(0);
+                                //back
+                                MenuScreen();
                                 break;
                         }
 
@@ -385,7 +553,7 @@ namespace Labirynth
             }
             return p;
         }
-        static Point[] getFinishCoordinates(char[,] lab1) //odnajdowanie położenia gracza
+        static Point[] getFinishCoordinates(char[,] lab1) //odnajdowanie położenia mety
         {
             Point[] tab = new Point[2];
             int ind=0;
@@ -436,6 +604,10 @@ namespace Labirynth
                         case '$':
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
                             Console.BackgroundColor = ConsoleColor.White;
+                            break;
+                        case '#':
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.BackgroundColor= ConsoleColor.DarkCyan;
                             break;
                     }
                     Console.Write(lab1[i, j]);
@@ -543,6 +715,9 @@ namespace Labirynth
                             case '$':
                                 currentChar = '$';
                                 break;
+                            case '#':
+                                currentChar = '#';
+                                break;
                             default:
                                 currentChar = '&';
                                 break;
@@ -569,7 +744,7 @@ namespace Labirynth
                                 {
                                     if (b < 30)
                                     {
-                                        LabirynthOne[a, b] = currentChar;
+                                        LabirynthTwo[a, b] = currentChar;
                                     }
                                 }
                             }
