@@ -10,6 +10,7 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Net.Http.Headers;
 using System.Threading;
 
 //+----------------------------------+
@@ -23,7 +24,110 @@ namespace Labirynth
 {
     class Program
     {
-        static void Main(string[] args)
+        
+    
+        public static class ConsoleHelper
+        {
+            
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+            internal unsafe struct CONSOLE_FONT_INFO_EX
+            {
+                internal uint cbSize;
+                internal uint nFont;
+                internal COORD dwFontSize;
+                internal int FontFamily;
+                internal int FontWeight;
+                internal fixed char FaceName[LF_FACESIZE];
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            internal struct COORD
+            {
+                internal short X;
+                internal short Y;
+
+                internal COORD(short x, short y)
+                {
+                    X = x;
+                    Y = y;
+                }
+            }
+            [DllImport("kernel32.dll", SetLastError = true)]
+            static extern IntPtr GetStdHandle(int nStdHandle);
+
+            [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+            static extern bool GetCurrentConsoleFontEx(
+                   IntPtr consoleOutput,
+                   bool maximumWindow,
+                   ref CONSOLE_FONT_INFO_EX lpConsoleCurrentFontEx);
+
+            [DllImport("kernel32.dll", SetLastError = true)]
+            static extern bool SetCurrentConsoleFontEx(
+                IntPtr consoleOutput,
+                bool maximumWindow,
+                ref CONSOLE_FONT_INFO_EX consoleCurrentFontEx);
+
+            private const int STD_OUTPUT_HANDLE = -11;
+            private const int TMPF_TRUETYPE = 4;
+            private const int LF_FACESIZE = 32;
+            private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+
+            public static void SetConsoleFont(string fontName = "Lucida Console")
+            {
+                unsafe
+                {
+                    IntPtr hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+                    if (hnd != INVALID_HANDLE_VALUE)
+                    {
+                        CONSOLE_FONT_INFO_EX info = new CONSOLE_FONT_INFO_EX();
+                        info.cbSize = (uint)Marshal.SizeOf(info);
+
+                        // Set console font to Lucida Console.
+                        CONSOLE_FONT_INFO_EX newInfo = new CONSOLE_FONT_INFO_EX();
+                        newInfo.cbSize = (uint)Marshal.SizeOf(newInfo);
+                        newInfo.FontFamily = TMPF_TRUETYPE;
+                        IntPtr ptr = new IntPtr(newInfo.FaceName);
+                        Marshal.Copy(fontName.ToCharArray(), 0, ptr, fontName.Length);
+
+                        // Get some settings from current font.
+                        newInfo.dwFontSize = new COORD(info.dwFontSize.X, info.dwFontSize.Y);
+                        newInfo.FontWeight =700;//info.FontWeight;
+                        SetCurrentConsoleFontEx(hnd, false, ref newInfo);
+                        
+                        //Console.WriteLine("CZCIONKA USTAWIONA!!! @ @ @");
+                        //Console.Read();
+                    }
+                }
+            }
+
+            /*public static void SetConsoleFontSize(int x, int y)
+            {
+                unsafe
+                {
+                    IntPtr hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+                    if (hnd != INVALID_HANDLE_VALUE)
+                    {
+                        CONSOLE_FONT_INFO_EX info = new CONSOLE_FONT_INFO_EX();
+                        info.cbSize = (uint)Marshal.SizeOf(info);
+
+                        // Set console font to Lucida Console.
+                        CONSOLE_FONT_INFO_EX newInfo = new CONSOLE_FONT_INFO_EX();
+                        newInfo.cbSize = (uint)Marshal.SizeOf(newInfo);
+                        newInfo.FontFamily = TMPF_TRUETYPE;
+                        IntPtr ptr = new IntPtr(newInfo.FaceName);
+                        Marshal.Copy(fontName.ToCharArray(), 0, ptr, fontName.Length);
+
+                        // Get some settings from current font.
+                        newInfo.dwFontSize = new COORD(20, 20); //new COORD(info.dwFontSize.X, info.dwFontSize.Y);
+                        newInfo.FontWeight = info.FontWeight;
+                        SetCurrentConsoleFontEx(hnd, false, ref newInfo);
+                    }
+                }
+            }*/
+        }
+    
+
+    static void Main(string[] args)
         {
             MenuScreen();
            
@@ -70,7 +174,7 @@ namespace Labirynth
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
-                coins = 7;
+                //coins = 7;
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -193,7 +297,7 @@ namespace Labirynth
             MenuScreen();
         }
 
-        static void Leve2()
+        static void Level2()
         {
             
             
@@ -216,7 +320,7 @@ namespace Labirynth
             ConsoleKeyInfo keyInfo;
                 while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
                 {
-                    coins = 10;
+                    //coins = 10;
                     switch (keyInfo.Key)
                     {
                         case ConsoleKey.UpArrow:
@@ -371,6 +475,11 @@ namespace Labirynth
 
         static void SetWindow()
         {
+            ConsoleHelper.SetConsoleFont("Courier new");
+            
+            Console.WindowHeight = 34;
+            Console.WindowWidth = 32;
+
             Console.SetWindowPosition(0,0);   
             Console.OutputEncoding = Encoding.UTF8;
             SetColors();
@@ -426,7 +535,7 @@ namespace Labirynth
                                 Level1();
                                 break;
                             case 9:
-                                Leve2();
+                                Level2();
                                 break;
                             case 10:
                                 //back
@@ -550,7 +659,7 @@ namespace Labirynth
                     switch (keyInfo.Key)
                     {
                         case ConsoleKey.RightArrow:
-                            Leve2();
+                            Level2();
                             break;
                     }
                 }
@@ -591,6 +700,7 @@ namespace Labirynth
             }
             return p;
         }
+
         static Point[] getFinishCoordinates(char[,] lab1) //odnajdowanie położenia mety
         {
             Point[] tab = new Point[2];
@@ -609,7 +719,6 @@ namespace Labirynth
             }
             return tab;
         }
-
 
         static void DrawLabirynth(Point playerPoint, char[,] lab1) //rysowanie labiryntu w konsoli
         {
@@ -653,6 +762,7 @@ namespace Labirynth
                 Console.Write("\n");
             }
         }
+
         static char[,] LoadLabirynth(int id) //odczyt labiryntu z pliku tekstowego
         {
             char[,] LabirynthOne = new char[30, 30];
@@ -661,7 +771,8 @@ namespace Labirynth
 
             try
             {
-                using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth.txt"))
+                //using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth.txt"))
+                using (StreamReader readtext = new StreamReader("labirynth.txt"))
                 {
                     string Map = readtext.ReadToEnd();
                     int a = 0, b = 0;
@@ -723,12 +834,15 @@ namespace Labirynth
             }
             catch
             {
-                
+                Console.WriteLine("Nie mozna wczytac map!");
+                Console.Read();
+                Environment.Exit(0);
             }
             
             try
             {
-                using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth2.txt"))
+                //using (StreamReader readtext = new StreamReader("C:\\Users\\Pawel\\repozytoria\\LabirynthRepo\\Labirynth\\Labirynth\\labirynth2.txt"))
+                using (StreamReader readtext = new StreamReader("labirynth2.txt"))
                 {
                     string Map = readtext.ReadToEnd();
                     int a = 0, b = 0;
@@ -793,7 +907,10 @@ namespace Labirynth
             }
             catch
             {
-                
+                Console.WriteLine("Nie mozna wczytac map!");
+                Console.Read();
+                Environment.Exit(0);
+
             }
            
             if (id == 1)
