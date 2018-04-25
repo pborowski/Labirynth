@@ -1,6 +1,6 @@
-﻿# Labirynth
+﻿# Flight Control System
 
-Simple console game written in C#
+WPF Symulation of Flight Control System 
 
 ![alt text](https://i.imgur.com/1quP7dz.png)
 
